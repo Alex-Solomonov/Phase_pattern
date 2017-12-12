@@ -1,3 +1,9 @@
+# encoding=utf8  
+import sys  
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
+import os
 import numpy as np
 import matplotlib.cm as cm
 import matplotlib.mlab as mlab
@@ -7,7 +13,7 @@ import Approx_equation as eq
 
 # #
 w_0 = 3.*1e-03 #Gaussian beam size in m
-wavelenth = 555*1e-09 # in m
+wavelenth = 555*1e-09 # in mb
 Topological_charge = 1
 Nodes_radial = 0 #Number of nodes in radial direction
 
@@ -66,22 +72,22 @@ new_phase = u +v
 
 
 
+my_path = os.path.dirname(__file__)
+print(my_path)
 
-
-fig, ax = plt.subplots(1,1)# ,subplot_kw=dict(projection='polar')
 # # amplitude
+fig, ax = plt.subplots(1,1)
 im = ax.imshow(amplitude**2, origin = 'lower', cmap=cm.gray)
 plt.colorbar(im, orientation='horizontal')
 
-# # # phase
-# # im = ax.imshow(phase, origin = 'lower', cmap=cm.gray)
-# # plt.axis('off')
+# # phase
+fig, ax = plt.subplots(1,1)
+im = ax.imshow(phase, origin = 'lower', cmap=cm.gray)
+plt.axis('off')
 
-# # # new_phase
-# # im = ax.imshow(new_phase, origin = 'lower', cmap=cm.gray)
-# # plt.axis('off')
+# # new_phase
+fig, ax = plt.subplots(1,1)
+im = ax.imshow(new_phase, origin = 'lower', cmap=cm.gray)
+plt.axis('off')
 
-# # plt.savefig('phase.png')
-# # plt.savefig('phase.tiff')
-# # plt.savefig('phase.jpg')
 plt.show()
