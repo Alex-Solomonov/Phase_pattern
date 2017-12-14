@@ -10,7 +10,7 @@ def LG_modes(r, theta, z, l, p, wavelenth, w_0):
 
 	
 	Re = 1/w_z * (r * 2**.5 / w_z)**abs(l) * np.exp(-r**2 / w_z**2) * scipy.special.assoc_laguerre(2*r**2 / w_z**2, p, l) 
-	Im = np.exp(-1j*k* r**2 / (2*R_z)) * np.exp(-1j*l*theta) * np.exp(-1j*k*z) * np.exp(1j*phi)
+	Im = 0
 
 	#additional field
 	Re1 = 0# 1/w_z * (r * 2**.5 / w_z)**abs(l-1) * np.exp(-r**2 / w_z**2) * scipy.special.assoc_laguerre(2*r**2 / w_z**2, p, l-1) 
