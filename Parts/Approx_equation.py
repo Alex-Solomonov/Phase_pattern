@@ -64,3 +64,13 @@ def F(r, theta, l, w_0):
 	Ampl = abs(u)
 	Phase = np.arctan2(np.imag(u), np.real(u))
 	return Ampl, Phase
+
+
+def Bessel(r, theta, l):
+	Ampl = scipy.special.jv(l, r)
+	Ampl = Ampl/np.max(Ampl)
+
+
+	Phase = l * theta
+	
+	return Ampl, Phase

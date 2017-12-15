@@ -1,20 +1,20 @@
 import numpy as np
 
 def Kotlyar(amplitude, phase):
-	u = np.zeros_like(amplitude)
-	v = np.zeros_like(amplitude)
-	new_phase = np.zeros_like(amplitude)
+	sizes = np.shape(phase)
 
-	for i in range(len(amplitude)):
-		for j in range(len(amplitude)):
-			if j % 2 == 0:
-				u[i,j] = phase[i,j] + np.arccos(amplitude[i,j]/2)
-				v[i,j] = 0
+	new_phase = np.empty([2*sizes[0], 2*sizes[1]], float)
 
-			else:
-				u[i,j] = 0
-				v[i,j] = phase[i,j] - np.arccos(amplitude[i,j]/2)
+	for i in range(sizes[0]):
+		for j in range(sizes[1]):
+			new_phase[2*i, 2*j] = new_phase[2*i+1, 2*j+1] = phase[i,j] + np.arccos(amplitude[i,j]/2)
+			new_phase[2*i, 2*j+1] = new_phase[2*i+1, 2*j] = phase[i,j] - np.arccos(amplitude[i,j]/2)
 
-	new_phase = u + v
+			for k in range(1):
+				for n in range(1):
+					if new_phase[2*i+k, 2*j+n] > np.pi:
+						new_phase[2*i+k, 2*j+n] = new_phase[2*i+k, 2*j+n] - 2*np.pi
+					if new_phase[2*i+k, 2*j+n] < -np.pi:
+						new_phase[2*i+k, 2*j+n] = new_phase[2*i+k, 2*j+n] + 2*np.pi
 
 	return new_phase
