@@ -74,3 +74,18 @@ def Bessel(r, theta, l):
 	Phase = l * theta
 	
 	return Ampl, Phase
+
+
+def Hollow_G(r, theta, l):
+	Ampl = (r)**l * np.exp(-r**2)
+	Phase = l * theta
+	
+	return Ampl, Phase
+
+def Square(r):
+	size = np.shape(r)
+
+	r[size[0]//4:3*size[0]//4,size[1]//4:3*size[1]//4] = 1
+	r[size[0]//2 - size[0]//10:size[0]//2 + size[0]//10,size[1]//2 - size[1]//10:size[1]//2 + size[1]//10] = 0
+
+	return r
