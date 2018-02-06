@@ -1,29 +1,30 @@
 # encoding=utf8  
 import sys  
 reload(sys)  
-sys.setdefaultencoding('utf8')
+sys.setdefaultencoding('utf8')	
 
 import numpy as np
 
 import Parts
 
 def Calculation_pattern(x_max, y_max, Resolution_x, Resolution_y, l, w_0):
-	# # Creation Calc Space
-
+	# Creation Calc Space
 	r, theta = Parts.Create_space.Generate(x_max, y_max, Resolution_x, Resolution_y)
 	
 	amplitude = np.zeros_like(r)
 	phase = np.zeros_like(r)
 	
 	amplitude, phase = Parts.eq.Bessel(r/w_0, theta, l)
-	amplitude = Parts.eq.Square(r)
-
 	new_phase = Parts.Code_ampl.Kotlyar(amplitude, phase)
 
-	# Parts.Image.show(amplitude**2)
+	a, ph = Parts.Misc.interference(r/w_0, amplitude, phase)
+	Parts.Image.show(a**2)
+	# Parts.Image.save(amplitude**2, '../list_of_figs/intens.eps')
 	# Parts.Image.show(phase)
-	Parts.Image.show(new_phase)
-	Parts.Image.save(new_phase, '../list_of_figs/sq_phase.png')
+	# Parts.Image.save(phase, '../list_of_figs/phase.eps')
+	# Parts.Image.show(new_phase)
+	# Parts.Image.show(Parts.Misc.Move(new_phase, 65, 40))
+	# Parts.Image.save(Parts.Misc.Move(new_phase, 0, 0), '../list_of_figs/HG.png')
 
 if __name__ == '__main__':
 	# # LC-R1080 parametrs
@@ -32,13 +33,13 @@ if __name__ == '__main__':
 	Resolution_x = 1920 #pixels
 	Resolution_y = 1200 
 
-	# # Beam parametr
+	# # Beam par's
 	Topological_charge = 1
-	w_0 = 1.5*1e-03 #Gaussian beam size in m
+	w_0 = 1*1e-03 #Gaussian beam size in m
 
 	Calculation_pattern(Width_y/2,
-	Width_x/2,
-	Resolution_y/2,
-	Resolution_x/2,
-	l = Topological_charge,
-	w_0 = w_0)
+		Width_x/2,
+		Resolution_y/2,
+		Resolution_x/2,
+		l = Topological_charge,
+		w_0 = w_0)
