@@ -68,13 +68,9 @@ def F(r, theta, l, w_0):
 
 def Bessel(r, theta, l):
 	Ampl = scipy.special.jv(l, r)
-	Ampl = Ampl/np.max(Ampl)
-
-
-	Phase = l * theta
+	Phase = np.angle(np.exp(1j*l*theta))
 	
 	return Ampl, Phase
-
 
 def Hollow_G(r, theta, l):
 	Ampl = (r)**l * np.exp(-r**2)
@@ -85,7 +81,7 @@ def Hollow_G(r, theta, l):
 def Square(r):
 	size = np.shape(r)
 
-	r[size[0]//4:3*size[0]//4,size[1]//4:3*size[1]//4] = 1
+	r[size[0]//4:3*size[0]//4,size[1]//4:3*size[1]//4] = 2
 	r[size[0]//2 - size[0]//10:size[0]//2 + size[0]//10,size[1]//2 - size[1]//10:size[1]//2 + size[1]//10] = 0
 
 	return r
