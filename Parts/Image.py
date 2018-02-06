@@ -2,6 +2,14 @@ import os
 import scipy.misc
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+from Tkinter import Tk
+from tkFileDialog import askopenfilename
+
+
+def read():
+	Tk().withdraw() # we don't want a full GUI, so keep the root window from appearing
+	filename = askopenfilename() # show an "Open" dialog box and return the path to the selected file
+	return scipy.misc.imread(filename)
 
 def save(data, name):
 
