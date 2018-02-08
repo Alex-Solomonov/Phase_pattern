@@ -16,9 +16,5 @@ def Kotlyar(amplitude, phase):
 			new_phase[2*i, 2*j] = new_phase[2*i+1, 2*j+1] = u[i,j]
 			new_phase[2*i, 2*j+1] = new_phase[2*i+1, 2*j] = v[i,j]
 
-
-	condlist = [new_phase <= np.pi , new_phase > np.pi, new_phase < -np.pi]
-	choicelist = [new_phase, new_phase-2*np.pi, new_phase+2*np.pi]
-
-	np.select(condlist, choicelist)
+	new_phase = np.angle(np.exp(1j*new_phase), deg=True)
 	return new_phase
