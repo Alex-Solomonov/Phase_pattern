@@ -12,7 +12,7 @@ space_x = space_y = 10
 gap_y = 20
 
 
-class Welcome(QtGui.QWidget):
+class Welcome(QtGui.QMainWindow):
 	
 	def __init__(self):
 		super(Welcome, self).__init__()
@@ -28,13 +28,12 @@ class Welcome(QtGui.QWidget):
 		Ok.resize(lenx_px, leny_px)
 		Ok.move(space_x, space_y)
 		Ok.clicked.connect(self.on_pushButton_clicked)
-		self.dialog = Main_win.main_frame(self.return_preinstall_settings())
-
-
+		
 
 		self.setGeometry(300, 150, main_frame_lenx, main_frame_leny)
 		self.setWindowTitle('Welcome!')
-		self.show()
+
+		self.dialog = Main_win.main_frame(self.return_preinstall_settings())
 
 	def toMain(self):
 		ex = Main_win.main_frame(self.return_preinstall_settings())

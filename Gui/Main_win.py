@@ -12,7 +12,7 @@ space_x = space_y = 10
 gap_y = 20
 
 
-class main_frame(QtGui.QWidget):
+class main_frame(QtGui.QMainWindow):
 	
 	def __init__(self, path):
 		super(main_frame, self).__init__()
@@ -114,7 +114,6 @@ class main_frame(QtGui.QWidget):
 
 		self.setGeometry(300, 150, main_frame_lenx, main_frame_leny)
 		self.setWindowTitle('Create the pattern')
-		self.show()
 	
 	def Generate(self):
 		self.amplitude, self.phase = Calculation_pattern(self.Width_y/2,
