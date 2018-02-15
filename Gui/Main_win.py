@@ -8,16 +8,21 @@ import os
 lenx_px, leny_px = 250, 25
 main_frame_lenx, main_frame_leny = 1200, 700
 len_side_indicator = 20
+space_x = space_y = 10
+gap_y = 20
 
 
 class main_frame(QtGui.QWidget):
 	
-	def __init__(self):
+	def __init__(self, path):
 		super(main_frame, self).__init__()
 
 		self.amplitude = 0
 		self.phase = 0
 		self.coded_phase = 0
+		self.path = path
+
+		print(self.path+'intens.png')
 
 
 		# if glob.glob('./Settings.ini'):
@@ -32,6 +37,8 @@ class main_frame(QtGui.QWidget):
 		self.Topological_charge = 1
 		self.w_0 = 1*1e-03 #Gaussian beam size in m
 
+
+
 		self.initUI()
 		
 		
@@ -42,34 +49,34 @@ class main_frame(QtGui.QWidget):
 		# Generate button
 		Generate = QtGui.QPushButton('Generate pattern', self)
 		Generate.resize(lenx_px, leny_px)
-		Generate.move(10, 10)
+		Generate.move(space_x, space_y)
 		Generate.clicked.connect(self.Generate)
 		Generate.clicked.connect(self.setColor)
 
 
 		# Encode button
-		Generate = QtGui.QPushButton('Encode', self)
-		Generate.resize(lenx_px, leny_px)
-		Generate.move(260, 10)
-		Generate.clicked.connect(self.encode_phase)
-
+		Encode = QtGui.QPushButton('Encode', self)
+		Encode.resize(lenx_px, leny_px)
+		Encode.move(space_x + lenx_px, space_y)
+		Encode.clicked.connect(self.encode_phase)
+		Encode.clicked.connect(self.setColor)
 
 
 		# Show botton
 		Show_Image_i = QtGui.QPushButton('Show intensity', self)
 		Show_Image_i.resize(lenx_px, leny_px)
-		Show_Image_i.move(10, 55)
+		Show_Image_i.move(space_x, space_y + leny_px + gap_y)
 		Show_Image_i.clicked.connect(self.Show)
 
 
 		Show_Image_p = QtGui.QPushButton('Show phase', self)
 		Show_Image_p.resize(lenx_px, leny_px)
-		Show_Image_p.move(10, 80)
+		Show_Image_p.move(space_x, space_y + 2*leny_px + gap_y)
 		Show_Image_p.clicked.connect(self.Show)
 
 		Show_Image = QtGui.QPushButton('Show encode phase', self)
 		Show_Image.resize(lenx_px, leny_px)
-		Show_Image.move(260, 80)
+		Show_Image.move(space_x + lenx_px, space_y + 2*leny_px + gap_y)
 		Show_Image.clicked.connect(self.Show)
 
 
@@ -95,11 +102,16 @@ class main_frame(QtGui.QWidget):
 
 
 
-		self.square1 = QtGui.QFrame(self)
-		self.square1.setGeometry(10, main_frame_leny-len_side_indicator-10, len_side_indicator, len_side_indicator)
-		self.square1.setStyleSheet("QWidget { background-color: red}")
+		self.indicator_generate = QtGui.QFrame(self)
+		self.indicator_generate.setGeometry(10, main_frame_leny-len_side_indicator-10, len_side_indicator, len_side_indicator)
+		self.indicator_generate.setStyleSheet("QWidget { background-color: red}")
+
+		self.indicator_encode = QtGui.QFrame(self)
+		self.indicator_encode.setGeometry(10, main_frame_leny-2*len_side_indicator-10, len_side_indicator, len_side_indicator)
+		self.indicator_encode.setStyleSheet("QWidget { background-color: red}")
 
 		# Main window par's
+
 		self.setGeometry(300, 150, main_frame_lenx, main_frame_leny)
 		self.setWindowTitle('Create the pattern')
 		self.show()
@@ -137,4 +149,8 @@ class main_frame(QtGui.QWidget):
 		source = self.sender()
 
 		if source.text() == 'Generate pattern':
-			self.square1.setStyleSheet("QFrame { background-color: green}")  
+			self.indicator_generate.setStyleSheet("QFrame { background-color: green}")
+
+		if source.text() == 'Encode':
+			# if self.phase != 0:
+			self.indicator_encode.setStyleSheet("QFrame {background-color: green}")
