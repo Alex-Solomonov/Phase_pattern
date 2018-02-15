@@ -1,7 +1,6 @@
 # import Gui
 import sys
 from PyQt4 import QtGui
-import Main_win
 import Gui
 
 def main():
