@@ -15,15 +15,11 @@ def Calculation_pattern(x_max, y_max, Resolution_x, Resolution_y, l, w_0):
 	phase = np.zeros_like(r)
 	
 	amplitude, phase = Parts.eq.Bessel(r/w_0, theta, l)
+	amplitude = Parts.eq.Square(r)
 	new_phase = Parts.Code_ampl.Kotlyar(amplitude, phase)
 
 	return amplitude, phase
 	# a, ph = Parts.Misc.interference(r/w_0, amplitude, phase)
-	# Parts.Image.show(amplitude**2)
-	# Parts.Image.save(amplitude**2, '../list_of_figs/intens.eps')
-	# Parts.Image.show(phase)
-	# Parts.Image.save(phase, '../list_of_figs/phase.eps')
-	# Parts.Image.show(new_phase)
 	# Parts.Image.show(Parts.Misc.Move(new_phase, 65, 40))
 	# Parts.Image.save(Parts.Misc.Move(new_phase, 0, 0), '../list_of_figs/HG.png')
 

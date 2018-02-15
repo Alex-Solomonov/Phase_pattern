@@ -17,17 +17,17 @@ class main_frame(QtGui.QWidget):
 		self.coded_phase = 0
 
 
-		if glob.glob('./Settings.ini'):
-			print('Yay!')
-		else:
+		# if glob.glob('./Settings.ini'):
+		# 	print('Yay!')
+		# else:
 			# # LC-R1080 parametrs
-			self.Width_x = 16.38*1e-03 # im m
-			self.Width_y = 10.56*1e-03 
-			self.Resolution_x = 1920 #pixels
-			self.Resolution_y = 1200 
-			# # Beam par's
-			self.Topological_charge = 1
-			self.w_0 = 1*1e-03 #Gaussian beam size in m
+		self.Width_x = 16.38*1e-03 # im m
+		self.Width_y = 10.56*1e-03 
+		self.Resolution_x = 1920 #pixels
+		self.Resolution_y = 1200 
+		# # Beam par's
+		self.Topological_charge = 1
+		self.w_0 = 1*1e-03 #Gaussian beam size in m
 
 		self.initUI()
 		
