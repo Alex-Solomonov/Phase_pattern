@@ -6,6 +6,9 @@ import glob
 import os
 
 lenx_px, leny_px = 250, 25
+main_frame_lenx, main_frame_leny = 1200, 700
+len_side_indicator = 20
+
 
 class main_frame(QtGui.QWidget):
 	
@@ -40,11 +43,8 @@ class main_frame(QtGui.QWidget):
 		Generate = QtGui.QPushButton('Generate pattern', self)
 		Generate.resize(lenx_px, leny_px)
 		Generate.move(10, 10)
-		# if self.phase == 0:
-		# 	Generate.setStyleSheet("background-color: red")
-		# else:
-		# 	Generate.setStyleSheet("background-color: rgb(0,0,0)")
 		Generate.clicked.connect(self.Generate)
+		Generate.clicked.connect(self.setColor)
 
 
 		# Encode button
@@ -54,26 +54,25 @@ class main_frame(QtGui.QWidget):
 		Generate.clicked.connect(self.encode_phase)
 
 
+
 		# Show botton
 		Show_Image_i = QtGui.QPushButton('Show intensity', self)
 		Show_Image_i.resize(lenx_px, leny_px)
 		Show_Image_i.move(10, 55)
-		Show_Image_i.clicked.connect(self.Show_I)
+		Show_Image_i.clicked.connect(self.Show)
 
 
 		Show_Image_p = QtGui.QPushButton('Show phase', self)
 		Show_Image_p.resize(lenx_px, leny_px)
 		Show_Image_p.move(10, 80)
-		Show_Image_p.clicked.connect(self.Show_Ph)
+		Show_Image_p.clicked.connect(self.Show)
 
 		Show_Image = QtGui.QPushButton('Show encode phase', self)
 		Show_Image.resize(lenx_px, leny_px)
 		Show_Image.move(260, 80)
-		Show_Image.clicked.connect(self.Show_EPh)
+		Show_Image.clicked.connect(self.Show)
 
 
-		# self.square = QtGui.QFrame(self)
-		# self.square.setGeometry(200, 20, 960, 600)
 
 
 		lbl1 = QtGui.QLabel('at the higher directory', self)
@@ -82,20 +81,26 @@ class main_frame(QtGui.QWidget):
 		Save_intensity = QtGui.QPushButton('Save intensity (in presetup folder)', self)
 		Save_intensity.resize(lenx_px, leny_px)
 		Save_intensity.move(10, 120)
-		Save_intensity.clicked.connect(self.Save_i)
+		Save_intensity.clicked.connect(self.Save)
 
 		Save_phase = QtGui.QPushButton('Save phase (in presetup folder)', self)
 		Save_phase.resize(lenx_px, leny_px)
 		Save_phase.move(10, 145)
-		Save_phase.clicked.connect(self.Save_ph)
+		Save_phase.clicked.connect(self.Save)
 
 		Save_ephase = QtGui.QPushButton('Save encoded phase (in presetup folder)', self)
 		Save_ephase.resize(lenx_px, leny_px)
 		Save_ephase.move(260, 145)
-		Save_ephase.clicked.connect(self.Save_eph)
+		Save_ephase.clicked.connect(self.Save)
+
+
+
+		self.square1 = QtGui.QFrame(self)
+		self.square1.setGeometry(10, main_frame_leny-len_side_indicator-10, len_side_indicator, len_side_indicator)
+		self.square1.setStyleSheet("QWidget { background-color: red}")
 
 		# Main window par's
-		self.setGeometry(300, 150, 1200, 700)
+		self.setGeometry(300, 150, main_frame_lenx, main_frame_leny)
 		self.setWindowTitle('Create the pattern')
 		self.show()
 	
@@ -110,19 +115,26 @@ class main_frame(QtGui.QWidget):
 	def encode_phase(self):
 		self.coded_phase = Parts.Code_ampl.Kotlyar(self.amplitude, self.phase)
 
-	def Show_I(self):
-		Parts.Image.show(self.amplitude**2)
-	def Show_Ph(self):
-		Parts.Image.show(self.phase)
+	def Show(self):
+		source = self.sender()
+		if source.text() == 'Show intensity':
+			Parts.Image.show(self.amplitude**2)
+		elif source.text() == 'Show phase':
+			Parts.Image.show(self.phase)
+		elif source.text() == 'Show encoded phase':
+			Parts.Image.show(self.coded_phase)
 
-	def Show_EPh(self):
-		Parts.Image.show(self.coded_phase)
+	def Save(self):
+		source = self.sender()		
+		if source.text() == 'Save intensity (in presetup folder)':
+			Parts.Image.save(self.amplitude**2, '../list_of_figs/intens.eps')
+		elif source.text() == 'Save phase (in presetup folder)':
+			Parts.Image.save(self.phase, '../list_of_figs/phase.eps')
+		elif source.text() == 'Save encoded phase (in presetup folder)':
+			Parts.Image.save(self.coded_phase, '../list_of_figs/ephase.png')
+		
+	def setColor(self):
+		source = self.sender()
 
-	def Save_i(self):
-		Parts.Image.save(self.amplitude**2, '../list_of_figs/intens.eps')
-
-	def Save_ph(self):
-		Parts.Image.save(self.phase, '../list_of_figs/phase.eps')
-
-	def Save_eph(self):
-		Parts.Image.save(self.coded_phase, '../list_of_figs/ephase.png')
+		if source.text() == 'Generate pattern':
+			self.square1.setStyleSheet("QFrame { background-color: green}")  

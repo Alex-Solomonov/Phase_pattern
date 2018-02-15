@@ -4,3 +4,5 @@
 /.pydevproject
 *.pyc
 Settings.ini
+*.txt
+*.png
