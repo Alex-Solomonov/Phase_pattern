@@ -1,6 +1,7 @@
 # Phase pattern
-File Pattern is main.
-
+main.py --- begin and main window
+main_win.py --- frames
+Pattern.py --- exe module
 /Parts
 
     __init__.py --- init packages.
