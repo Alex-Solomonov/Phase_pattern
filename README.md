@@ -1,8 +1,12 @@
 # Phase_pattern
 
 	main.py --- begin and main window
-	main_win.py --- frames
+	
 	Pattern.py --- exe module
+	/Gui
+		__init__.py --- init packages.
+		Main_win.py --- Main window.
+		Welcome_win.py --- Welcome window
 	/Parts
 		__init__.py --- init packages.
 		Approx_equation.py --- exact solution of Bessel-Gauss beam.
