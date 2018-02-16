@@ -74,14 +74,21 @@ def Bessel(r, theta, l):
 
 def Hollow_G(r, theta, l):
 	Ampl = (r)**l * np.exp(-r**2)
-	Phase = l * theta
+	Phase = np.angle(np.exp(1j*l*theta))
 	
 	return Ampl, Phase
+
+def Holoow_rectangle(r):
+	size = np.shape(r)
+
+	r[size[0]//3:2*size[0]//3,size[1]//3:2*size[1]//3] = 2
+	r[size[0]//2 - size[0]//10:size[0]//2 + size[0]//10,size[1]//2 - size[1]//10:size[1]//2 + size[1]//10] = 0
+
+	return r
 
 def Square(r):
 	size = np.shape(r)
 
-	r[size[0]//4:3*size[0]//4,size[1]//4:3*size[1]//4] = 2
-	r[size[0]//2 - size[0]//10:size[0]//2 + size[0]//10,size[1]//2 - size[1]//10:size[1]//2 + size[1]//10] = 0
+	r[size[0]//2 - 20:size[0]//2 + 20,size[1]//2 - 20:size[1]//2 + 20] = 2
 
 	return r
