@@ -4,6 +4,7 @@ from Pattern import Calculation_pattern
 import Parts
 import glob
 import os
+import numpy as np
 
 lenx_px, leny_px = 250, 25
 main_frame_lenx, main_frame_leny = 1200, 700
@@ -35,7 +36,10 @@ class main_frame(QtGui.QMainWindow):
 		self.Resolution_y = 1200 
 		# # Beam par's
 		self.Topological_charge = 1
-		self.w_0 = 1*1e-03 #Gaussian beam size in m
+		# self.w_0 = 1*1e-03 #Gaussian beam size in m
+		# 150px - NA of beam
+		self.w_0 = 150 * np.min([self.Width_x/self.Resolution_x, self.Width_y/self.Resolution_y])
+		print(self.w_0)
 
 
 
@@ -102,6 +106,14 @@ class main_frame(QtGui.QMainWindow):
 
 
 
+		GES = QtGui.QPushButton('Generate, encode, save', self)
+		GES.resize(lenx_px, leny_px)
+		GES.move(10, 200)
+		GES.clicked.connect(self.GES)
+
+
+
+
 		self.indicator_generate = QtGui.QFrame(self)
 		self.indicator_generate.setGeometry(10, main_frame_leny-len_side_indicator-10, len_side_indicator, len_side_indicator)
 		self.indicator_generate.setStyleSheet("QWidget { background-color: red}")
@@ -143,6 +155,8 @@ class main_frame(QtGui.QMainWindow):
 			Parts.Image.save(self.phase, '../list_of_figs/phase.eps')
 		elif source.text() == 'Save encoded phase (in presetup folder)':
 			Parts.Image.save(self.coded_phase, '../list_of_figs/ephase.png')
+		elif source.text() == 'Generate, encode, save':
+			Parts.Image.save(self.coded_phase, '../list_of_figs/ephase.png')
 		
 	def setColor(self):
 		source = self.sender()
@@ -153,3 +167,8 @@ class main_frame(QtGui.QMainWindow):
 		if source.text() == 'Encode':
 			# if self.phase != 0:
 			self.indicator_encode.setStyleSheet("QFrame {background-color: green}")
+
+	def GES(self):
+		self.Generate()
+		self.encode_phase()
+		self.Save()

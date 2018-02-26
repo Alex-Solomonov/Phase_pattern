@@ -72,13 +72,21 @@ def Bessel(r, theta, l):
 	
 	return Ampl, Phase
 
+def Bessel_max_at_2(r, theta, l):
+	Ampl = scipy.special.jv(l, r)
+	Phase = np.angle(np.exp(1j*l*theta))
+	factor = 2 / np.amax(Ampl)
+
+	return factor*Ampl, Phase
+
+
 def Hollow_G(r, theta, l):
 	Ampl = (r)**l * np.exp(-r**2)
 	Phase = np.angle(np.exp(1j*l*theta))
 	
 	return Ampl, Phase
 
-def Holoow_rectangle(r):
+def Hollow_rectangle(r):
 	size = np.shape(r)
 
 	r[size[0]//3:2*size[0]//3,size[1]//3:2*size[1]//3] = 2
@@ -89,6 +97,7 @@ def Holoow_rectangle(r):
 def Square(r):
 	size = np.shape(r)
 
-	r[size[0]//2 - 20:size[0]//2 + 20,size[1]//2 - 20:size[1]//2 + 20] = 2
+	side = 150
+	r[size[0]//2 - side/2:size[0]//2 + side/2,size[1]//2 - side/2:size[1]//2 + side/2] = 2
 
 	return r

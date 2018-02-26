@@ -14,9 +14,8 @@ def Calculation_pattern(x_max, y_max, Resolution_x, Resolution_y, l, w_0):
 	amplitude = np.zeros_like(r)
 	phase = np.zeros_like(r)
 	
-	amplitude, phase = Parts.eq.Bessel(r/w_0, theta, l)
-	amplitude = Parts.eq.Square(r)
-	new_phase = Parts.Code_ampl.Kotlyar(amplitude, phase)
+	amplitude, phase = Parts.eq.Bessel_max_at_2(r/w_0, theta, l)
+	# amplitude = Parts.eq.Square(r)
 
 	return amplitude, phase
 	# a, ph = Parts.Misc.interference(r/w_0, amplitude, phase)

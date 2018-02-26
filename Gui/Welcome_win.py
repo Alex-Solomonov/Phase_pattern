@@ -5,7 +5,7 @@ import glob
 import os
 import Main_win
 
-lenx_px, leny_px = 250, 25
+lenx_px, leny_px = 100, 25
 main_frame_lenx, main_frame_leny = 1200, 700
 len_side_indicator = 20
 space_x = space_y = 10
@@ -22,18 +22,28 @@ class Welcome(QtGui.QMainWindow):
 	def initUI(self):
 		self.col = QtGui.QColor(0, 0, 0)
 
-		self.path = '../list_of_figs/'
+		if glob.glob('./Settings.ini'):
 
-		Ok = QtGui.QPushButton('Ok', self)
-		Ok.resize(lenx_px, leny_px)
-		Ok.move(space_x, space_y)
-		Ok.clicked.connect(self.on_pushButton_clicked)
-		
+			self.path = '../list_of_figs/'
+
+			Yes = QtGui.QPushButton('Yes', self)
+			Yes.resize(lenx_px, leny_px)
+			Yes.move(space_x, space_y)
+			Yes.clicked.connect(self.on_pushButton_clicked)
+
+			No = QtGui.QPushButton('No, use default', self)
+			No.resize(lenx_px, leny_px)
+			No.move(space_x+lenx_px, space_y)
+			No.clicked.connect(self.on_pushButton_clicked)
+			self.dialog = Main_win.main_frame(self.return_preinstall_settings())
+
+		else:
+			self.close()
 
 		self.setGeometry(300, 150, main_frame_lenx, main_frame_leny)
 		self.setWindowTitle('Welcome!')
 
-		self.dialog = Main_win.main_frame(self.return_preinstall_settings())
+		
 
 	def toMain(self):
 		ex = Main_win.main_frame(self.return_preinstall_settings())
