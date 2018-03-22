@@ -1,6 +1,5 @@
 import numpy as np
-import Approx_equation as eq
-def Move(array, x, y):
+def move(array, x, y):
 	'''
 	Input ndarray
 	x - move to the left
@@ -13,7 +12,7 @@ def Move(array, x, y):
 
 	return(array)
 
-def Prism_x(array, x):
+def prism_x(array, x):
 	size = np.shape(array)
 
 	prism = np.zeros_like(array)
@@ -25,12 +24,8 @@ def Prism_x(array, x):
 
 	return array
 
-def interference(r, amplitude, phase):
-	amplitude_G, phase = eq.Bessel(r, phase, 0)
-	u = np.zeros_like(amplitude).astype('complex')
-	u = amplitude_G + amplitude*np.exp(1j*phase)
+def get_amplitude(field):
+	return np.abs(field)
 
-	amplitude = abs(u)
-	phase = np.arctan2(np.imag(u),np.real(u))
-
-	return amplitude, phase
+def get_phase(field):
+	return  np.arctan2(np.imag(field), np.real(field))
