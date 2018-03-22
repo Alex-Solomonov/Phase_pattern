@@ -1,6 +1,11 @@
 import numpy as np
 
-def Generate(x_max, y_max, points_at_x, points_at_y):
+def Generate(LSM_pars):
+	x_max = LSM_pars[0]
+	y_max = LSM_pars[1]
+	points_at_x = LSM_pars[2]
+	points_at_y = LSM_pars[3]
+
 	x = np.linspace(-x_max, x_max, points_at_x)
 	y = np.linspace(-y_max, y_max, points_at_y)
 	
