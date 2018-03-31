@@ -1,4 +1,6 @@
 from PyQt5.QtWidgets import *
+import functools
+import Gui
 
 
 class Intro(QDialog):
@@ -23,10 +25,12 @@ class Intro(QDialog):
 
 		self.setWindowTitle("Introduction")
 
+
+
 	def init_text(self):
 		self.Label_button = ["No, use default for LC-R1080",\
 				"0"]
-		
+		print(self.arg)
 		if self.arg == True:
 			self.label = QLabel("Hi! I find config files\n\
 			"
@@ -48,8 +52,6 @@ class Intro(QDialog):
 			"FWHM"]
 		self.Label_Beam_pars_base_units = [" ",\
 			"m"]
-
-
 
 		self.Default_parameters()
 
@@ -80,20 +82,28 @@ class Intro(QDialog):
 
 		layout.setColumnStretch(1, 10)
 		layout.setColumnStretch(2, 20)
+
+
 		self.SLM_parametes_Group_box.setLayout(layout)
 
 	def create_Button_Group_box(self):
 		self.horizontal_Button_box = QGroupBox()
 		layout = QGridLayout()
+
 		Warning_label = ["* Clicking 'yes' will create", \
 			"the 'Settings.ini' file."]
+		self.Button_list = []
 
 		for i in range(len(self.Label_button)):
 			button = QPushButton(self.Label_button[i])
+			self.Button_list.append(button)
 			Warning_layout = QLabel(Warning_label[i])
 			layout.addWidget(button, 0, i)
 			layout.addWidget(Warning_layout, 1, i)
 
+			# connect
+			button.clicked.connect(\
+				functools.partial(self.btnPressed,self.Label_button[i]))
 
 		self.horizontal_Button_box.setLayout(layout)
 
@@ -112,3 +122,58 @@ class Intro(QDialog):
 			layout.addWidget(lineEdit, i, 3)
 
 		self.Beam_parameters_Group_box.setLayout(layout)
+
+	def btnPressed(self, idx):
+		# No, use default for LC-R1080
+		if idx == self.Label_button[0]:
+			self.main = Gui.Main_frame()
+			self.close()
+			self.main.show()
+		if idx == self.Label_button[1] and self.arg == True:
+			self.SLM_pars, self.Beam_pars = read_settings()
+			self.main = Gui.Main_frame()
+			self.close()
+			self.main.show()
+		else:
+			create_settings(self.SLM_pars, self.Beam_pars)
+			self.main = Gui.Main_frame()
+			self.close()
+			self.main.show()
+		
+
+def create_settings(SLM_pars, Beam_pars):
+		# create_settings(self.SLM_pars, self.Beam_pars)
+	Mask_SLM = ['Width_y',\
+		'Width_x',\
+		'Resolution_y',\
+		'Resolution_x']
+	Mask_Beam = ['Topological_charge',\
+		'FWHM']
+
+	with open('Settings.ini', 'w') as f:
+		f.write("# Known parameters of spatial light modulator\n")
+		for i in range(len(SLM_pars)):
+			f.write("{} = {}\n".format(Mask_SLM[i], SLM_pars[i]))
+		f.write("\n# Parameters of beam\n")
+		for i in range(len(Beam_pars)):
+			f.write("{} = {}\n".format(Mask_Beam[i], Beam_pars[i]))
+
+def read_settings():
+	with open('Settings.ini', 'r') as f:
+		raw = f.read()
+	
+	raw = raw.split('\n')
+	for i in range(raw.count('')):
+		raw.remove('')
+	for line in raw:
+		if line[0] == '#':
+			raw.remove(line)
+	cooked = []
+	for line in raw:
+		line = line.split(' ')
+		cooked.append(line[-1])
+
+	SLM_pars = cooked[0:4]
+	Beam_pars = cooked[4:6]
+	
+	return SLM_pars, Beam_pars

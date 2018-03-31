@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
 	app = QApplication(sys.argv)
 
-	if glob.glob('Setting.ini'):
+	if glob.glob('./Setting.ini'):
 		dialog = Gui.Intro(arg = True)
 	else:
 		dialog = Gui.Intro(arg = False)
