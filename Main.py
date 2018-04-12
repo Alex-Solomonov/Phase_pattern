@@ -10,6 +10,8 @@ if __name__ == '__main__':
 
 	if glob.glob('Settings.ini'):
 		state, SLM_pars, Beam_pars = Gui.Initial.read_settings()
+
+		# Dont show again = 1 
 		if state == 1:
 			dialog = Gui.Main_window.Main_frame(SLM_pars, Beam_pars)
 		else:
