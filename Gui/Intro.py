@@ -142,13 +142,13 @@ class Intro(QDialog):
 			self.close()
 			self.main.show()
 		if idx == self.Label_button[1] and self.arg == True:
-			self.SLM_pars, self.Beam_pars = read_settings()
+			self.SLM_pars, self.Beam_pars = Gui.Initial.read_settings()
 			self.main = Gui.Main_frame(self.SLM_pars,\
 					self.Beam_pars)
 			self.close()
 			self.main.show()
 		else:
-			create_settings(self.SLM_pars, self.Beam_pars, self.state)
+			Gui.Initial.create_settings(self.SLM_pars, self.Beam_pars, self.state)
 			self.main = Gui.Main_frame(self.SLM_pars,\
 					self.Beam_pars)
 			self.close()
