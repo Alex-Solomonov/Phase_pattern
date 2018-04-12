@@ -3,16 +3,7 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import *
 import functools
 import Parts
-
-class RenderArea(QWidget):
-	def __init__(self, parent=None):
-		super(RenderArea, self).__init__(parent)
-		self.setBackgroundRole(QPalette.Midlight)
-		self.setAutoFillBackground(True)
-
-
-
-		
+from .Image_preview import *
 
 class Main_frame(QDialog):
 	"""docstring for Main_frame"""
@@ -20,18 +11,27 @@ class Main_frame(QDialog):
 		super(Main_frame, self).__init__()
 		self.SLM_pars = SLM_pars
 		self.Beam_pars = Beam_pars
+		self.Field = 0
+		self.path = '../list_of_figs/'
+
+
 
 		self.init_text()
 		self.create_Beam_Group_box()
 		self.create_Encode_Group_box()
+		self.create_Image_Group_box()
+		self.statusBar = QStatusBar()
 
-		# RenderArea = RenderArea
-
-		mainLayout = QVBoxLayout()
-		mainLayout.addWidget(self.Beam_Group_box)
-		mainLayout.addWidget(self.Encode_Group_box)
+		mainLayout = QGridLayout()
+		mainLayout.addWidget(self.Beam_Group_box, 0, 0)
+		mainLayout.addWidget(self.Encode_Group_box, 1 ,0)
+		mainLayout.addWidget(self.Image_Group_box, 0, 1 , 0, 1)
+		mainLayout.addWidget(self.statusBar,1,1,1,1)
+		self.statusBar.showMessage('Ready')
 
 		self.setLayout(mainLayout)
+
+		pixmap = QPixmap('image.jpeg')
 
 		self.setWindowTitle("Main page")
 	
@@ -51,19 +51,34 @@ class Main_frame(QDialog):
 			"Fuentes",\
 			"IFTA"]
 		self.Show_n_Save = ["Show amplitude",\
-			"Show phase"]
+			"Show phase",\
+			"Show encoded phase",\
+			"Save encoded phase"]
 
 	def btnPressed(self, idx):
 		if idx == self.Amplitude_Label_button[0]:
 			self.Coordinates = Parts.Create_space.Generate(self.SLM_pars)
 			self.Field = Parts.Field_equation.Bessel_max_at_2(\
 				self.Coordinates, self.Beam_pars)
-
-		if idx == self.Amplitude_Label_button[1]:
-			pass
+			self.statusBar.showMessage("Amplitude and phase created")
+		elif idx == self.Amplitude_Label_button[1]:
+			self.statusBar.showMessage("Amplitude read")
 
 		if idx == self.Encode_Label_Button:
 			self.Encoded_field = Parts.Encode_field.Kotlyar(self.field)
+			self.statusBar.showMessage("Field created")
+
+		if idx == self.Show_n_Save[0]:
+			pass
+		elif idx == self.Show_n_Save[1]:
+			pass
+		elif idx == self.Show_n_Save[2]:
+			pass
+		elif idx == self.Show_n_Save[3]:
+			Parts.Image.save(Parts.Misc.get_phase(self.Encoded_field),\
+				'../list_of_figs/new.png')
+			self.statusBar.showMessage("Image saved")
+
 
 
 	def create_Beam_Group_box(self):
@@ -100,3 +115,22 @@ class Main_frame(QDialog):
 		layout.addWidget(button, len(self.Encode_Label)+1 , 0)
 		
 		self.Encode_Group_box.setLayout(layout)
+
+	def create_Image_Group_box(self):
+		self.Image_Group_box = QGroupBox("Image previewer")
+		layout = QGridLayout()
+
+		self.Image_frame = QtImageViewer()
+		layout.addWidget(self.Image_frame, 0, 0, 1, 0)
+
+
+		for i in range(0, len(self.Show_n_Save), 2):
+			for column in range(2):
+				button = QPushButton(self.Show_n_Save[i+column])
+				layout.addWidget(button, i+1, column)
+
+				button.clicked.connect(\
+					functools.partial(self.btnPressed,\
+						self.Show_n_Save[i+column]))
+
+		self.Image_Group_box.setLayout(layout)
