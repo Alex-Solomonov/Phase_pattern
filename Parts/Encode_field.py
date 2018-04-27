@@ -45,7 +45,7 @@ def Fuentes(field, LSM_pars):
 
 	noise_like_signal = random_mask - amplitude
 
-	diverging_element = Parts.eq.axicon(LSM_pars, cycle = 160)
+	diverging_element = Parts.Field_equation.axicon(LSM_pars, cycle = -10)
 
 	pattern = field \
 		+ ((1-amplitude) - noise_like_signal) * diverging_element \
@@ -53,14 +53,37 @@ def Fuentes(field, LSM_pars):
 
 	return pattern
 
-def Gerchber_Saxton(target):
-	# # Init beam par's
-	# sizes = np.shape(field)
-	# amplitude = Parts.Misc.get_amplitude(field)
-	# phase = Parts.Misc.get_phase(field)
+def Gerchber_Saxton(target_field, input_field):
+	# Error finding function
+	def find_err(field_A):
+		Check_intensity = Parts.Misc.get_amplitude(field_A)**2
+		Sum = Check_intensity - np.mean(Check_intensity)
+		err = (np.sum(Sum**2))**0.5 / np.sum(Check_intensity)
+		return err
 
-	target_amplitude = Parts.Misc.get_amplitude(target)
+	# Preparation
+	# Get target amplitude from target field
+	target_amplitude = Parts.Misc.get_amplitude(target_field)
+	# [0, 1] -> [0, 255]
+	target_amplitude = (255/np.max(target_amplitude)) * target_amplitude
 
-	A = scipy.fftpack.fftshift(scipy.ffrpack.ifft2(scipy.fftpack.fftshift(target_amplitude)))
+	# Get first step of the algorithm
+	A = scipy.fftpack.fftshift(\
+			scipy.fftpack.ifft2(\
+				scipy.fftpack.fftshift(target_amplitude)))
 
-	pass
+	# Iterations will continue until the error is 0.5%
+	while find_err(A) >= 5 * 1e-03:
+		B = Parts.Misc.get_amplitude(input_field) * \
+				np.exp(1j * np.angle(A))
+		C = scipy.fftpack.fftshift(\
+				scipy.fftpack.ifft2(\
+					scipy.fftpack.fftshift(B)))
+		D = target_amplitude * np.exp(1j * np.angle(C))
+		A = scipy.fftpack.fftshift(\
+				scipy.fftpack.ifft2(\
+					scipy.fftpack.fftshift(D)))
+
+
+	# return encoded field A
+	return A
