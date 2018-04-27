@@ -110,6 +110,11 @@ def Hollow_G(Coordinates, Beam_pars):
 	return field
 
 def Hollow_rectangle(Coordinates, Beam_pars):
+	r = Coordinates[0]
+	theta = Coordinates[1]
+	l = Beam_pars[0]
+	w_0 = Beam_pars[1]
+
 	size = np.shape(r)
 
 	r[size[0]//3:2*size[0]//3,size[1]//3:2*size[1]//3] = 2
@@ -118,6 +123,11 @@ def Hollow_rectangle(Coordinates, Beam_pars):
 	return r
 
 def Square(Coordinates, Beam_pars):
+	r = Coordinates[0]
+	theta = Coordinates[1]
+	l = Beam_pars[0]
+	w_0 = Beam_pars[1]
+
 	size = np.shape(r)
 
 	side = 10
