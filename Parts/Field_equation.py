@@ -1,5 +1,6 @@
 import numpy as np
 import scipy.special
+import Parts
 
 
 
@@ -87,7 +88,7 @@ def Bessel_max_at_2(Coordinates, Beam_pars):
 	l = Beam_pars[0]
 	w_0 = Beam_pars[1]
 
-	Ampl = scipy.special.jv(l, r)
+	Ampl = scipy.special.jv(l, r/w_0)
 	Ampl -= np.min(Ampl)
 	factor = 2 / np.amax(Ampl)
 
@@ -105,7 +106,8 @@ def Hollow_G(Coordinates, Beam_pars):
 	Ampl = (r/w_0)**l * np.exp(-(r/w_0)**2)
 	Phase = np.angle(np.exp(1j*l*theta))
 	
-	return Ampl, Phase
+	field = Ampl * np.exp(1j * l * Phase)
+	return field
 
 def Hollow_rectangle(Coordinates, Beam_pars):
 	size = np.shape(r)
@@ -135,15 +137,15 @@ def axicon(LSM_pars, cycle):
 	Side_resolution = np.min([Resolution_x, Resolution_y])
 	if Side_resolution == Resolution_x:
 		Side = Width_x/2
-		Move = Resolution_y - Side_resolution
+		Move = int(Resolution_y - Side_resolution)
 		axis = 1
 	else:
 		Side = Width_y/2
-		Move = Resolution_x - Side_resolution
+		Move = int(Resolution_x - Side_resolution)
 		axis = 0
 
 	# Create square-like pattern
-	Coordinates = Parts.Create_space.Generate([Side, Side, 
+	Coordinates = Parts.Create_space.Generate([Side, Side, \
 		Side_resolution, Side_resolution])
 
 	phase = 2*np.pi * cycle *(1 - Coordinates[0]/Side)
@@ -159,10 +161,10 @@ def axicon(LSM_pars, cycle):
 	# 1 1 0 0
 	# 1 1 0 0
 	if axis == 1:
-		zero = np.empty([Side_resolution, Move], float)
+		zero = np.empty([int(Side_resolution), Move], float)
 		pattern = np.hstack((phase, zero))
 	else:
-		zero = np.empty([Move, Side_resolution], float)
+		zero = np.empty([Move, int(Side_resolution)], float)
 		pattern = np.vstack((phase, zero))
 	# Move to center
 	# 0 1 1 0
